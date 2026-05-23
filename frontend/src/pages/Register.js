@@ -6,6 +6,7 @@ function Register() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [role, setRole] = useState('user');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
@@ -18,7 +19,7 @@ function Register() {
         setLoading(true);
 
         try {
-            await API.post('/api/auth/register', { name, email, password });
+            await API.post('/api/auth/register', { name, email, password, role });
             setSuccess('Account created successfully! Redirecting to login...');
             setTimeout(() => navigate('/login'), 2000);
         } catch (err) {
@@ -79,6 +80,20 @@ function Register() {
                             minLength={6}
                             autoComplete="new-password"
                         />
+                    </div>
+
+                    <div className="form-group">
+                        <label className="form-label">Register As</label>
+                        <select
+                            className="form-input"
+                            value={role}
+                            onChange={e => setRole(e.target.value)}
+                            required
+                            style={{ width: '100%', height: '45px', padding: '0 10px', fontSize: '15px' }}
+                        >
+                            <option value="user">Regular User (Attendee)</option>
+                            <option value="admin">Event Organizer (Admin)</option>
+                        </select>
                     </div>
 
                     <button

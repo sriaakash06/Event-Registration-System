@@ -27,6 +27,11 @@ function Navbar() {
 
                 {token ? (
                     <>
+                        {user?.role === 'admin' && (
+                            <Link to="/create-event" className={isActive('/create-event')}>
+                                Create Event
+                            </Link>
+                        )}
                         <Link to="/my-registrations" className={isActive('/my-registrations')}>
                             My Registrations
                         </Link>

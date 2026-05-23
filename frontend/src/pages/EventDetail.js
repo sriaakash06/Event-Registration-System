@@ -10,6 +10,7 @@ function EventDetail() {
     const [registering, setRegistering] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
     const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
 
     useEffect(() => {
         API.get(`/api/events/${id}`)
@@ -40,6 +41,17 @@ function EventDetail() {
             setMessage({ type: 'error', text: errorMsg });
         } finally {
             setRegistering(false);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!window.confirm('⚠️ Are you sure you want to delete this event?')) return;
+        try {
+            await API.delete(`/api/events/${id}`);
+            setMessage({ type: 'success', text: '🗑️ Event deleted successfully! Redirecting...' });
+            setTimeout(() => navigate('/'), 1500);
+        } catch (err) {
+            setMessage({ type: 'error', text: err.response?.data?.error || 'Delete failed. Please try again.' });
         }
     };
 
@@ -136,15 +148,24 @@ function EventDetail() {
                     </div>
                 )}
 
-                <div className="detail-actions">
+                <div className="detail-actions" style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                     <button
                         className="btn btn-success"
                         onClick={handleRegister}
                         disabled={registering}
-                        style={{ flex: 1 }}
+                        style={{ flex: 2, minWidth: '200px' }}
                     >
                         {registering ? 'Registering...' : (token ? '🎟️ Register for this Event' : '🔐 Login to Register')}
                     </button>
+                    {user?.role === 'admin' && (
+                        <button
+                            className="btn btn-danger"
+                            onClick={handleDelete}
+                            style={{ flex: 1, minWidth: '120px' }}
+                        >
+                            🗑️ Delete Event
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

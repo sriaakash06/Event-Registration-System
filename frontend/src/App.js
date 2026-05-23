@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Events from './pages/Events';
 import EventDetail from './pages/EventDetail';
 import MyRegistrations from './pages/MyRegistrations';
+import CreateEvent from './pages/CreateEvent';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/events/:id" element={<EventDetail />} />
           <Route path="/my-registrations" element={<MyRegistrations />} />
+          <Route path="/create-event" element={<CreateEvent />} />
         </Routes>
       </div>
     </Router>

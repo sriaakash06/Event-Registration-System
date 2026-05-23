@@ -1,0 +1,23 @@
+# Backend ignores
+event-registration-system/node_modules/
+event-registration-system/.env
+event-registration-system/*.env
+event-registration-system/.env.*
+!event-registration-system/.env.example
+
+# Frontend ignores
+frontend/node_modules/
+frontend/build/
+frontend/.pnp
+frontend/.pnp.js
+frontend/coverage/
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# General ignores
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

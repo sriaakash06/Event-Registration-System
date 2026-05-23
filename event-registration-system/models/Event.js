@@ -22,6 +22,14 @@ const EventSchema = new mongoose.Schema({
     type: Number,
     default: 100
   },
+  category: {
+    type: String,
+    default: 'General'
+  },
+  tags: {
+    type: [String],
+    default: []
+  },
   organizer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

@@ -1,6 +1,6 @@
 const express = require('express');
 const Registration = require('../models/Registration');
-const { protect } = require('../middleware/authMiddleware');
+const { protect, adminOnly } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -55,6 +55,29 @@ router.patch('/:id/cancel', protect, async (req, res) => {
     res.json({ message: 'Registration cancelled', registration });
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+});
+
+// @GET /api/registrations/all — View all registrations (admin only)
+router.get('/all', protect, adminOnly, async (req, res) => {
+  try {
+    const registrations = await Registration.find()
+      .populate('user', 'name email')
+      .populate('event', 'title date location capacity');
+    res.json(registrations);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// @GET /api/registrations/event/:eventId — View all registrations for a specific event (admin only)
+router.get('/event/:eventId', protect, adminOnly, async (req, res) => {
+  try {
+    const registrations = await Registration.find({ event: req.params.eventId })
+      .populate('user', 'name email');
+    res.json(registrations);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 

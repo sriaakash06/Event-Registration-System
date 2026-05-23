@@ -20,41 +20,58 @@ function Login() {
     };
 
     return (
-        <div style={styles.container}>
-            <div style={styles.card}>
-                <h2 style={styles.title}>Welcome Back 👋</h2>
-                {error && <p style={styles.error}>{error}</p>}
+        <div className="form-container animate-fade-in-up" style={{ opacity: 0, animationDelay: '0.1s', animationFillMode: 'forwards' }}>
+            <div className="form-card">
+                <div className="form-header">
+                    <div className="form-icon">🔑</div>
+                    <h2 className="form-title">Welcome Back</h2>
+                    <p className="form-subtitle">Sign in to manage your events and registrations</p>
+                </div>
+
+                {error && <div className="form-error">⚠️ {error}</div>}
+
                 <form onSubmit={handleSubmit}>
-                    <input style={styles.input} placeholder="Email" type="email"
-                        value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required />
-                    <input style={styles.input} placeholder="Password" type="password"
-                        value={form.password} onChange={e => setForm({ ...form, password: e.target.value })} required />
-                    <button type="submit" style={styles.btn}>Login</button>
+                    <div className="form-group">
+                        <label className="form-label">Email Address</label>
+                        <input
+                            type="email"
+                            className="form-input"
+                            placeholder="you@example.com"
+                            value={form.email}
+                            onChange={e => setForm({ ...form, email: e.target.value })}
+                            required
+                            autoComplete="email"
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label className="form-label">Password</label>
+                        <input
+                            type="password"
+                            className="form-input"
+                            placeholder="Enter your password"
+                            value={form.password}
+                            onChange={e => setForm({ ...form, password: e.target.value })}
+                            required
+                            autoComplete="current-password"
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="btn btn-primary btn-full"
+                        style={{ padding: '14px', fontSize: '1rem', marginTop: '8px' }}
+                    >
+                        Login
+                    </button>
                 </form>
-                <p style={{ textAlign: 'center', marginTop: '15px' }}>
+
+                <div className="form-footer">
                     No account? <Link to="/register">Register</Link>
-                </p>
+                </div>
             </div>
         </div>
     );
 }
-
-const styles = {
-    container: { display: 'flex', justifyContent: 'center', marginTop: '60px' },
-    card: {
-        backgroundColor: 'white', padding: '40px', borderRadius: '10px',
-        boxShadow: '0 4px 15px rgba(0,0,0,0.1)', width: '100%', maxWidth: '400px'
-    },
-    title: { textAlign: 'center', marginBottom: '25px', color: '#2c3e50' },
-    input: {
-        width: '100%', padding: '12px', marginBottom: '15px', borderRadius: '6px',
-        border: '1px solid #ddd', fontSize: '15px', boxSizing: 'border-box'
-    },
-    btn: {
-        width: '100%', padding: '12px', backgroundColor: '#2c3e50', color: 'white',
-        border: 'none', borderRadius: '6px', fontSize: '16px', cursor: 'pointer'
-    },
-    error: { color: 'red', textAlign: 'center', marginBottom: '15px' }
-};
 
 export default Login;

@@ -8,6 +8,8 @@ function CreateEvent() {
     const [date, setDate] = useState('');
     const [location, setLocation] = useState('');
     const [capacity, setCapacity] = useState('');
+    const [category, setCategory] = useState('General');
+    const [tags, setTags] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
@@ -25,7 +27,9 @@ function CreateEvent() {
                 description,
                 date,
                 location,
-                capacity: Number(capacity)
+                capacity: Number(capacity),
+                category,
+                tags
             });
             setSuccess('🎉 Event created successfully! Redirecting...');
             setTimeout(() => navigate('/'), 2000);
@@ -81,6 +85,35 @@ function CreateEvent() {
                             value={location}
                             onChange={e => setLocation(e.target.value)}
                             required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label className="form-label">Category</label>
+                        <select
+                            className="form-input"
+                            value={category}
+                            onChange={e => setCategory(e.target.value)}
+                            required
+                            style={{ width: '100%', height: '45px', padding: '0 10px', fontSize: '15px' }}
+                        >
+                            <option value="General">General</option>
+                            <option value="Conference">Conference</option>
+                            <option value="Workshop">Workshop</option>
+                            <option value="Meetup">Meetup</option>
+                            <option value="Social">Social</option>
+                            <option value="Exhibition">Exhibition</option>
+                        </select>
+                    </div>
+
+                    <div className="form-group">
+                        <label className="form-label">Tags (comma-separated)</label>
+                        <input
+                            type="text"
+                            className="form-input"
+                            placeholder="e.g. react, coding, meetup"
+                            value={tags}
+                            onChange={e => setTags(e.target.value)}
                         />
                     </div>
 

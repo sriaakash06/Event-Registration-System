@@ -28,12 +28,20 @@ function Navbar() {
                 {token ? (
                     <>
                         {user?.role === 'admin' && (
-                            <Link to="/create-event" className={isActive('/create-event')}>
-                                Create Event
-                            </Link>
+                            <>
+                                <Link to="/admin" className={isActive('/admin')}>
+                                    Dashboard
+                                </Link>
+                                <Link to="/create-event" className={isActive('/create-event')}>
+                                    Create Event
+                                </Link>
+                            </>
                         )}
                         <Link to="/my-registrations" className={isActive('/my-registrations')}>
                             My Registrations
+                        </Link>
+                        <Link to="/profile" className={isActive('/profile')}>
+                            Profile
                         </Link>
                         <div className="nav-user">
                             <span className="nav-user-avatar">

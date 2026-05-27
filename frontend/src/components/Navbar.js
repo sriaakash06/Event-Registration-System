@@ -1,15 +1,14 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-function Navbar() {
+function Navbar({ user, token, onAuthChange }) {
     const location = useLocation();
     const navigate = useNavigate();
-    const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user') || 'null');
 
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        if (onAuthChange) onAuthChange();
         navigate('/login');
     };
 
@@ -48,6 +47,20 @@ function Navbar() {
                                 {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                             </span>
                             <span>{user?.name || 'User'}</span>
+                            {user?.role === 'admin' && (
+                                <span style={{
+                                    fontSize: '0.65rem',
+                                    padding: '2px 8px',
+                                    borderRadius: '999px',
+                                    background: 'rgba(16, 185, 129, 0.15)',
+                                    color: '#10b981',
+                                    border: '1px solid rgba(16, 185, 129, 0.3)',
+                                    fontWeight: '600',
+                                    marginLeft: '6px',
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.5px'
+                                }}>Admin</span>
+                            )}
                         </div>
                         <button className="nav-btn nav-btn-danger" onClick={handleLogout}>
                             Logout

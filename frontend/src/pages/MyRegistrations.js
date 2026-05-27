@@ -4,94 +4,51 @@ import API from '../api';
 
 function MyRegistrations() {
     const [registrations, setRegistrations] = useState([]);
-    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
 
     useEffect(() => {
         if (!token) return navigate('/login');
-        API.get('/api/registrations/my')
-            .then(res => {
-                setRegistrations(res.data);
-                setLoading(false);
-            })
-            .catch(() => setLoading(false));
-    }, [token, navigate]);
+        API.get('/registrations/my').then(res => setRegistrations(res.data));
+    }, []);
 
     const handleCancel = async (id) => {
         try {
-            await API.patch(`/api/registrations/${id}/cancel`);
+            await API.patch(`/registrations/${id}/cancel`);
             setRegistrations(registrations.map(r =>
                 r._id === id ? { ...r, status: 'cancelled' } : r
             ));
         } catch (err) {
-            alert('Cancel failed. Please try again.');
+            alert('Cancel failed');
         }
     };
 
-    const formatDate = (dateStr) => {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('en-US', {
-            weekday: 'short',
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-        });
-    };
-
-    if (loading) {
-        return (
-            <div className="page-container">
-                <div className="spinner-container">
-                    <div className="spinner"></div>
-                    <span className="spinner-text">Loading your registrations...</span>
-                </div>
-            </div>
-        );
-    }
-
     return (
-        <div className="page-container animate-fade-in">
-            <div className="page-header">
-                <h1 className="page-title">My Registrations</h1>
-                <p className="page-subtitle">Track and manage your event registrations</p>
-            </div>
-
+        <div>
+            <h2 style={styles.title}>📋 My Registrations</h2>
             {registrations.length === 0 ? (
-                <div className="empty-state">
-                    <div className="empty-state-icon">📋</div>
-                    <h3 className="empty-state-title">No registrations yet</h3>
-                    <p className="empty-state-text">Browse events and register to see them here!</p>
-                </div>
+                <p style={{ textAlign: 'center', color: '#888' }}>No registrations yet.</p>
             ) : (
-                <div className="card-grid">
+                <div style={styles.grid}>
                     {registrations.map(reg => (
-                        <div key={reg._id} className="card">
-                            <h3 className="card-title">{reg.event?.title || 'Event'}</h3>
-                            <div className="card-meta">
-                                <span className="card-meta-icon">📅</span>
-                                {reg.event?.date ? formatDate(reg.event.date) : 'Date TBD'}
-                            </div>
-                            {reg.event?.location && (
-                                <div className="card-meta">
-                                    <span className="card-meta-icon">📍</span>
-                                    {reg.event.location}
-                                </div>
-                            )}
-                            <div className="card-footer">
-                                <span className={`badge ${reg.status === 'confirmed' ? 'badge-confirmed' : 'badge-cancelled'}`}>
+                        <div key={reg._id} style={styles.card}>
+                            <h3>{reg.event?.title}</h3>
+                            <p>📅 {new Date(reg.event?.date).toDateString()}</p>
+                            <p>📍 {reg.event?.location}</p>
+                            <p>Status:
+                                <span style={{
+                                    color: reg.status === 'confirmed' ? 'green' : 'red',
+                                    fontWeight: 'bold', marginLeft: '8px'
+                                }}>
                                     {reg.status === 'confirmed' ? '✅ Confirmed' : '❌ Cancelled'}
                                 </span>
-                                {reg.status === 'confirmed' && (
-                                    <button
-                                        className="btn btn-danger"
-                                        onClick={() => handleCancel(reg._id)}
-                                        style={{ padding: '6px 16px', fontSize: '0.82rem' }}
-                                    >
-                                        Cancel
-                                    </button>
-                                )}
-                            </div>
+                            </p>
+                            {reg.status === 'confirmed' && (
+                                <button style={styles.cancelBtn}
+                                    onClick={() => handleCancel(reg._id)}>
+                                    Cancel Registration
+                                </button>
+                            )}
                         </div>
                     ))}
                 </div>
@@ -99,5 +56,21 @@ function MyRegistrations() {
         </div>
     );
 }
+
+const styles = {
+    title: { textAlign: 'center', color: '#2c3e50', marginBottom: '30px' },
+    grid: {
+        display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+        gap: '20px', maxWidth: '1100px', margin: '0 auto'
+    },
+    card: {
+        backgroundColor: 'white', padding: '25px', borderRadius: '10px',
+        boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+    },
+    cancelBtn: {
+        marginTop: '10px', padding: '8px 16px', backgroundColor: '#e74c3c',
+        color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', width: '100%'
+    }
+};
 
 export default MyRegistrations;

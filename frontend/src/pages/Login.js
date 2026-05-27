@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import API from '../api';
 
-function Login() {
+function Login({ onAuthChange }) {
     const [form, setForm] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -13,6 +13,7 @@ function Login() {
             const { data } = await API.post('/api/auth/login', form);
             localStorage.setItem('token', data.token);
             localStorage.setItem('user', JSON.stringify(data.user));
+            if (onAuthChange) onAuthChange();
             navigate('/');
         } catch (err) {
             setError(err.response?.data?.error || 'Login failed');
